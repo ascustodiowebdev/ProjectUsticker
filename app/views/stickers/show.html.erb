@@ -1,0 +1,14 @@
+<h1><%= @sticker.name %></h1>
+<p><strong>Description:</strong> <%= @sticker.description %></p>
+
+<% if @sticker.image.attached? %>
+  <%= image_tag @sticker.image.variant(resize_to_limit: [300, 300]) %>
+<% else %>
+  <%= image_tag 'placeholder.png', height: 300, width: 300 %>
+<% end %>
+
+<p><strong>Price:</strong> <%= @sticker.price %></p>
+
+<%= link_to 'Back to Index', stickers_path %>
+<%= link_to 'Edit', edit_sticker_path(@sticker) %>
+<%= button_to 'Delete', sticker_path(@sticker), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>

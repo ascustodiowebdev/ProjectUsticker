@@ -1,0 +1,37 @@
+<%= simple_form_for(@sticker, url: sticker_path(@sticker), method: :patch, local: true, html: { multipart: true }) do |form| %>
+  <% if @sticker.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@sticker.errors.count, 'error') %> prohibited this sticker from being saved:</h2>
+
+      <ul>
+        <% @sticker.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :description %>
+    <%= form.text_area :description %>
+  </div>
+
+  <div class="field">
+    <%= form.label :price %>
+    <%= form.number_field :price %>
+  </div>
+
+  <div class="field">
+    <%= form.label :image %>
+    <%= form.file_field :image %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Update Sticker" %>
+  </div>
+<% end %>
