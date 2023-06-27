@@ -8,6 +8,7 @@
       <tr>
         <th>Name</th>
         <th>Price</th>
+        <th>Quantity</th> <!-- New column for quantity -->
         <th>Action</th>
       </tr>
     </thead>
@@ -16,6 +17,7 @@
         <tr>
           <td><%= sticker.name %></td>
           <td><%= number_to_currency(sticker.price) %></td>
+          <td><%= @cart.count(sticker.id) %></td> <!-- Display the quantity -->
           <td>
             <%= link_to 'Remove', remove_from_cart_sticker_path(sticker), method: :delete, data: { confirm: 'Are you sure?' } %>
           </td>

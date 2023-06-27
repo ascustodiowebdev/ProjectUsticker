@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_27_162220) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_27_164438) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -56,6 +56,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_27_162220) do
   create_table "orders_stickers", id: false, force: :cascade do |t|
     t.bigint "order_id", null: false
     t.bigint "sticker_id", null: false
+    t.integer "quantity", default: 1
   end
 
   create_table "stickers", force: :cascade do |t|
