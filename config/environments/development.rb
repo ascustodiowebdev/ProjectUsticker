@@ -58,10 +58,6 @@ Rails.application.configure do
 
 
 
-  # config.cloudinary.cloud_name =" dlxvzxjfl"
-  # config.cloudinary.api_key = "916472961115122"
-  # config.cloudinary.api_secret = "0SdP8VkBZSYnajuwFPYQR_-6AAg"
-
   # Suppress logger output for asset requests.
   config.assets.quiet = true
   # Raises error for missing translations.

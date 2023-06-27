@@ -56,6 +56,26 @@ class StickersController < ApplicationController
     redirect_to stickers_path
   end
 
+  def add_to_cart
+    @sticker = Sticker.find(params[:id])
+    cart << @sticker.id
+    redirect_to stickers_path, notice: 'Sticker added to cart.'
+  end
+
+  def cart
+    @cart = session[:cart] || []
+    @cart_total = calculate_cart_total
+  end
+
+  def view_cart
+    @cart_stickers = Sticker.find(cart)
+  end
+
+  def remove_from_cart
+    @sticker = Sticker.find(params[:id])
+    cart.delete(@sticker.id)
+    redirect_to cart_path, notice: 'Sticker removed from cart.'
+  end
 
   private
 

@@ -78,13 +78,6 @@ Rails.application.configure do
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
 
-  # Use a different logger for distributed setups.
-  # require "syslog/logger"
-  # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new "app-name")
-  # config.cloudinary.cloud_name =" dlxvzxjfl"
-  # config.cloudinary.api_key = "916472961115122"
-  # config.cloudinary.api_secret = "0SdP8VkBZSYnajuwFPYQR_-6AAg"
-
   if ENV["RAILS_LOG_TO_STDOUT"].present?
     logger           = ActiveSupport::Logger.new(STDOUT)
     logger.formatter = config.log_formatter

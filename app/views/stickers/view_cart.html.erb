@@ -1,0 +1,31 @@
+<!-- app/views/stickers/view_cart.html.erb -->
+<h1>Shopping Cart</h1>
+
+<% if @cart.empty? %>
+  <p>Your cart is empty.</p>
+<% else %>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @cart.each do |item| %>
+        <tr>
+          <td><%= item[:name] %></td>
+          <td><%= number_to_currency(item[:price]) %></td>
+          <td><%= link_to 'Remove', remove_from_cart_sticker_path(item[:id]), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <p>Total: <%= number_to_currency(@cart_total) %></p>
+
+  <%= link_to 'Checkout', checkout_path, class: 'btn btn-primary' %>
+<% end %>
+
+<%= link_to 'Back to Stickers', stickers_path %>

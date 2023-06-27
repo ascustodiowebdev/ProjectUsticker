@@ -1,0 +1,25 @@
+
+<h1>Checkout</h1>
+
+<%= form_with(url: process_checkout_path, method: :post) do |form| %>
+  <div class="mb-3">
+    <%= form.label :full_name, class: "form-label" %>
+    <%= form.text_field :full_name, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :email, class: "form-label" %>
+    <%= form.email_field :email, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :address, class: "form-label" %>
+    <%= form.text_area :address, class: "form-control" %>
+  </div>
+
+  <div class="d-grid">
+    <%= form.submit "Place Order", class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<%= link_to 'Back to Cart', cart_path %>
