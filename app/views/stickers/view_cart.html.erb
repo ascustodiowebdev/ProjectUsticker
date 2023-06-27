@@ -17,13 +17,13 @@
         <tr>
           <td><%= item[:name] %></td>
           <td><%= number_to_currency(item[:price]) %></td>
-          <td><%= link_to 'Remove', remove_from_cart_sticker_path(item[:id]), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+       <%= link_to 'Remove', remove_from_cart_sticker_path(item[:id]), method: :delete, data: { confirm: 'Are you sure?' } %>
         </tr>
       <% end %>
     </tbody>
   </table>
 
-  <p>Total: <%= number_to_currency(@cart_total) %></p>
+<p><strong>Cart Total:</strong> <%= number_to_currency(calculate_cart_total(@cart_stickers)) %></p>
 
   <%= link_to 'Checkout', checkout_path, class: 'btn btn-primary' %>
 <% end %>

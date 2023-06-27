@@ -56,25 +56,80 @@ class StickersController < ApplicationController
     redirect_to stickers_path
   end
 
+  ######## CART STARTS HERE ############
+
   def add_to_cart
     @sticker = Sticker.find(params[:id])
-    cart << @sticker.id
+    session[:cart] ||= []
+    session[:cart] << @sticker.id
     redirect_to stickers_path, notice: 'Sticker added to cart.'
   end
 
   def cart
-    @cart = session[:cart] || []
-    @cart_total = calculate_cart_total
+    @cart_stickers = Sticker.find(session[:cart] || [])
   end
 
   def view_cart
-    @cart_stickers = Sticker.find(cart)
+    @cart_stickers = Sticker.find(session[:cart] || [])
+    @cart_total = calculate_cart_total(@cart_stickers)
+    @cart = @cart_stickers.map { |sticker| { id: sticker.id, name: sticker.name, price: sticker.price } }
   end
+
 
   def remove_from_cart
     @sticker = Sticker.find(params[:id])
-    cart.delete(@sticker.id)
+
+    # Initialize the cart if it is nil
+    session[:cart] ||= {}
+
+    # Retrieve the cart from the session
+    @cart = session[:cart]
+
+    # Remove the sticker from the cart
+    @cart.delete(@sticker.id)
+
+    # Save the updated cart in the session
+    session[:cart] = @cart
+
     redirect_to cart_path, notice: 'Sticker removed from cart.'
+  end
+
+
+
+  def checkout
+    @cart_stickers = Sticker.find(cart)
+    @cart_total = calculate_cart_total
+    @order = Order.new # Create a new instance of the Order model (assuming you have an Order model)
+  end
+
+  def process_order
+    # Retrieve the necessary information from the checkout form
+    full_name = params[:order][:full_name]
+    email = params[:order][:email]
+    address = params[:order][:address]
+    phone_number = params[:order][:phone_number]
+
+    # Create a new Order object and assign the information
+    @order = Order.new(
+      full_name: full_name,
+      email: email,
+      address: address,
+      phone_number: phone_number
+    )
+
+    # Add the stickers from the cart to the order (assuming you have a cart method)
+    @cart_stickers = Sticker.find(cart)
+    @order.stickers << @cart_stickers
+    if @order.save
+      # Clear the cart after the order is successfully processed
+      session[:cart] = []
+
+      # Optionally, redirect to a confirmation page or display an order summary
+      redirect_to order_confirmation_path(@order)
+    else
+      # Handle the case where order creation fails, such as displaying an error message or redirecting back to the checkout page
+      redirect_to checkout_path, alert: 'Failed to process the order.'
+    end
   end
 
   private
@@ -83,4 +138,7 @@ class StickersController < ApplicationController
     params.require(:sticker).permit(:name, :description, :price, :image)
   end
 
+  def calculate_cart_total(cart_stickers)
+    cart_stickers.sum(&:price)
+  end
 end

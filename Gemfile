@@ -53,6 +53,8 @@ gem 'cloudinary', '~> 1.20.0'
 gem "dotenv-rails", groups: [:development, :test]
 gem 'image_processing', '~> 1.2'
 gem 'simple_form'
+gem 'jquery-rails'
+
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

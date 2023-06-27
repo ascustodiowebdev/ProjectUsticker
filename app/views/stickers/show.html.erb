@@ -9,6 +9,10 @@
 
 <p><strong>Price:</strong> <%= @sticker.price %></p>
 
+<%= form_tag(add_to_cart_sticker_path(@sticker), method: :post) do %>
+  <%= submit_tag 'Add to Cart', class: 'btn btn-primary' %>
+<% end %>
+
 <%= link_to 'Back to Index', stickers_path %>
 <%= link_to 'Edit', edit_sticker_path(@sticker) %>
 <%= button_to 'Delete', sticker_path(@sticker), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>

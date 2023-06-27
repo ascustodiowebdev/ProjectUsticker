@@ -12,5 +12,6 @@ Rails.application.routes.draw do
 
   root "stickers#index"
   get 'cart', to: 'stickers#view_cart', as: 'cart'
-  get 'checkout', to: 'stickers#checkout'
+  get 'checkout', to: 'stickers#checkout', as: 'checkout'
+  post 'process_order', to: 'stickers#process_order', as: 'process_order'
 end
