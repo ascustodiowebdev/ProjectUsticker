@@ -1,7 +1,6 @@
-<!-- app/views/stickers/view_cart.html.erb -->
 <h1>Shopping Cart</h1>
 
-<% if @cart.empty? %>
+<% if @cart_stickers.empty? %>
   <p>Your cart is empty.</p>
 <% else %>
   <table>
@@ -13,17 +12,19 @@
       </tr>
     </thead>
     <tbody>
-      <% @cart.each do |item| %>
+      <% @cart_stickers.each do |sticker| %>
         <tr>
-          <td><%= item[:name] %></td>
-          <td><%= number_to_currency(item[:price]) %></td>
-       <%= link_to 'Remove', remove_from_cart_sticker_path(item[:id]), method: :delete, data: { confirm: 'Are you sure?' } %>
+          <td><%= sticker.name %></td>
+          <td><%= number_to_currency(sticker.price) %></td>
+          <td>
+            <%= link_to 'Remove', remove_from_cart_sticker_path(sticker), method: :delete, data: { confirm: 'Are you sure?' } %>
+          </td>
         </tr>
       <% end %>
     </tbody>
   </table>
 
-<p><strong>Cart Total:</strong> <%= number_to_currency(calculate_cart_total(@cart_stickers)) %></p>
+  <p><strong>Cart Total:</strong> <%= number_to_currency(@cart_total) %></p>
 
   <%= link_to 'Checkout', checkout_path, class: 'btn btn-primary' %>
 <% end %>

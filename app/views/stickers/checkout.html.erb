@@ -1,6 +1,6 @@
 <h1>Checkout</h1>
 
-<%= form_with(url: process_checkout_path, method: :post) do |form| %>
+<%= form_with(model: @order, url: process_order_path, method: :post) do |form| %>
   <div class="mb-3">
     <%= form.label :full_name, class: "form-label" %>
     <%= form.text_field :full_name, class: "form-control" %>
@@ -25,5 +25,12 @@
     <%= form.submit "Place Order", class: "btn btn-primary" %>
   </div>
 <% end %>
+
+<h2>Cart Items:</h2>
+<% @cart_stickers.each do |sticker| %>
+  <p><%= sticker.name %> - <%= number_to_currency(sticker.price) %></p>
+<% end %>
+
+<h2>Total Price: <%= number_to_currency(@cart_total) %></h2>
 
 <%= link_to 'Back to Cart', cart_path %>

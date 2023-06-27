@@ -1,4 +1,5 @@
 class StickersController < ApplicationController
+  require_dependency 'order'
 
   def new
     @sticker = Sticker.new
@@ -18,7 +19,6 @@ class StickersController < ApplicationController
       render 'new'
     end
   end
-
 
   def show
     @sticker = Sticker.find(params[:id])
@@ -70,10 +70,22 @@ class StickersController < ApplicationController
   end
 
   def view_cart
-    @cart_stickers = Sticker.find(session[:cart] || [])
-    @cart_total = calculate_cart_total(@cart_stickers)
-    @cart = @cart_stickers.map { |sticker| { id: sticker.id, name: sticker.name, price: sticker.price } }
+    sticker_ids = session[:cart] || []
+    cart_sticker_ids = sticker_ids.group_by(&:itself).transform_values(&:count).keys
+    @cart_stickers = Sticker.where(id: cart_sticker_ids)
+
+    if @cart_stickers.count == cart_sticker_ids.count
+      @cart_total = calculate_cart_total(@cart_stickers)
+      @cart = @cart_stickers.map { |sticker| { id: sticker.id, name: sticker.name, price: sticker.price, quantity: sticker_ids.count(sticker.id) } }
+    else
+      missing_sticker_ids = cart_sticker_ids - @cart_stickers.pluck(:id)
+      session[:cart] = sticker_ids - missing_sticker_ids
+      flash[:alert] = "Some stickers are no longer available and have been removed from your cart."
+      redirect_to cart_path
+    end
   end
+
+
 
 
   def remove_from_cart
@@ -94,32 +106,36 @@ class StickersController < ApplicationController
     redirect_to cart_path, notice: 'Sticker removed from cart.'
   end
 
-
-
   def checkout
-    @cart_stickers = Sticker.find(cart)
-    @cart_total = calculate_cart_total
+    @cart_stickers = Sticker.find(session[:cart] || [])
+    @cart_total = calculate_cart_total(@cart_stickers)
     @order = Order.new # Create a new instance of the Order model (assuming you have an Order model)
   end
 
   def process_order
     # Retrieve the necessary information from the checkout form
-    full_name = params[:order][:full_name]
+    name = params[:order][:full_name]
     email = params[:order][:email]
-    address = params[:order][:address]
     phone_number = params[:order][:phone_number]
+    address = params[:order][:address]
 
+    # Debug statements
+    puts "Name: #{name}"
+    puts "Email: #{email}"
+    puts "Phone Number: #{phone_number}"
+    puts "Address: #{address}"
     # Create a new Order object and assign the information
     @order = Order.new(
-      full_name: full_name,
+      name: name,
       email: email,
       address: address,
       phone_number: phone_number
     )
 
     # Add the stickers from the cart to the order (assuming you have a cart method)
-    @cart_stickers = Sticker.find(cart)
+    @cart_stickers = Sticker.find(session[:cart] || [])
     @order.stickers << @cart_stickers
+
     if @order.save
       # Clear the cart after the order is successfully processed
       session[:cart] = []
@@ -132,10 +148,19 @@ class StickersController < ApplicationController
     end
   end
 
+  def order_confirmation
+    @order = Order.find(params[:id])
+  end
+
+
   private
 
   def sticker_params
     params.require(:sticker).permit(:name, :description, :price, :image)
+  end
+
+  def order_params
+    params.require(:order).permit(:name, :email, :address, :phone_number)
   end
 
   def calculate_cart_total(cart_stickers)

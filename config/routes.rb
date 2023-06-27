@@ -14,4 +14,5 @@ Rails.application.routes.draw do
   get 'cart', to: 'stickers#view_cart', as: 'cart'
   get 'checkout', to: 'stickers#checkout', as: 'checkout'
   post 'process_order', to: 'stickers#process_order', as: 'process_order'
+  get 'order_confirmation/:id', to: 'stickers#order_confirmation', as: 'order_confirmation'
 end

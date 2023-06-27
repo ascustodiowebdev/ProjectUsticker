@@ -1,0 +1,14 @@
+<h1>Order Confirmation</h1>
+
+<p>Thank you for your order!</p>
+<p>Order ID: <%= @order.id %></p>
+<p>Name: <%= @order.name %></p>
+<p>Email: <%= @order.email %></p>
+<p>Address: <%= @order.address %></p>
+
+<h2>Ordered Stickers:</h2>
+<ul>
+  <% @order.stickers.each do |sticker| %>
+    <li><%= sticker.name %> - <%= sticker.price %></li>
+  <% end %>
+</ul>
